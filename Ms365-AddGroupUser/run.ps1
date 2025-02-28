@@ -60,12 +60,6 @@ $UserEmail = $Request.Body.UserEmail
 $GroupName = $Request.Body.GroupName
 $TenantId = $Request.Body.TenantId
 $TicketId = $Request.Body.TicketId
-$SecurityKey = $env:SecurityKey
-
-if ($SecurityKey -And $SecurityKey -ne $Request.Headers.SecurityKey) {
-    Write-Host "Invalid security key"
-    break;
-}
 
 if (-Not $userEmail) {
     $message = "UserEmail cannot be blank."

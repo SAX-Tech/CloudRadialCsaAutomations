@@ -71,27 +71,14 @@ if (-Not $userEmail) {
     $message = "UserEmail cannot be blank."
     $resultCode = 500
 }
-else {
-    $UserEmail = $UserEmail
-}
 
 if (-Not $groupName) {
     $message = "GroupName cannot be blank."
     $resultCode = 500
 }
-else {
-    $GroupName = $GroupName
-}
 
 if (-Not $TenantId) {
     $TenantId = $env:Ms365_TenantId
-}
-else {
-    $TenantId = $TenantId
-}
-
-if (-Not $TicketId) {
-    $TicketId = ""
 }
 
 Write-Host "User Email: $UserEmail"

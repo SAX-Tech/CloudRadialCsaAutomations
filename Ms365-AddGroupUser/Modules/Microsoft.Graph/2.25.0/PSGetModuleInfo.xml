@@ -1,0 +1,805 @@
+<Objs Version="1.1.0.1" xmlns="http://schemas.microsoft.com/powershell/2004/04">
+  <Obj RefId="0">
+    <TN RefId="0">
+      <T>Microsoft.PowerShell.Commands.PSRepositoryItemInfo</T>
+      <T>System.Management.Automation.PSCustomObject</T>
+      <T>System.Object</T>
+    </TN>
+    <MS>
+      <S N="Name">Microsoft.Graph</S>
+      <Version N="Version">2.25.0</Version>
+      <S N="Type">Module</S>
+      <S N="Description">Microsoft Graph PowerShell module</S>
+      <S N="Author">Microsoft</S>
+      <S N="CompanyName">msgraph-sdk-powershell</S>
+      <S N="Copyright">© Microsoft Corporation. All rights reserved.</S>
+      <DT N="PublishedDate">2024-11-21T06:29:16-05:00</DT>
+      <Obj N="InstalledDate" RefId="1">
+        <DT>2025-03-05T12:19:25.8097214-05:00</DT>
+        <MS>
+          <Obj N="DisplayHint" RefId="2">
+            <TN RefId="1">
+              <T>Microsoft.PowerShell.Commands.DisplayHintType</T>
+              <T>System.Enum</T>
+              <T>System.ValueType</T>
+              <T>System.Object</T>
+            </TN>
+            <ToString>DateTime</ToString>
+            <I32>2</I32>
+          </Obj>
+        </MS>
+      </Obj>
+      <Nil N="UpdatedDate" />
+      <URI N="LicenseUri">https://aka.ms/devservicesagreement</URI>
+      <URI N="ProjectUri">https://github.com/microsoftgraph/msgraph-sdk-powershell</URI>
+      <URI N="IconUri">https://raw.githubusercontent.com/microsoftgraph/msgraph-sdk-powershell/dev/docs/images/graph_color256.png</URI>
+      <Obj N="Tags" RefId="3">
+        <TN RefId="2">
+          <T>System.Object[]</T>
+          <T>System.Array</T>
+          <T>System.Object</T>
+        </TN>
+        <LST>
+          <S>MicrosoftGraph</S>
+          <S>Microsoft</S>
+          <S>Office365</S>
+          <S>Graph</S>
+          <S>PowerShell</S>
+          <S>Outlook</S>
+          <S>OneDrive</S>
+          <S>AzureAD</S>
+          <S>SharePoint</S>
+          <S>Intune</S>
+          <S>AzureAutomationNotSupported</S>
+          <S>PSModule</S>
+          <S>PSEdition_Core</S>
+          <S>PSEdition_Desktop</S>
+        </LST>
+      </Obj>
+      <Obj N="Includes" RefId="4">
+        <TN RefId="3">
+          <T>System.Collections.Hashtable</T>
+          <T>System.Object</T>
+        </TN>
+        <DCT>
+          <En>
+            <S N="Key">DscResource</S>
+            <Obj N="Value" RefId="5">
+              <TNRef RefId="2" />
+              <LST />
+            </Obj>
+          </En>
+          <En>
+            <S N="Key">RoleCapability</S>
+            <Ref N="Value" RefId="5" />
+          </En>
+          <En>
+            <S N="Key">Cmdlet</S>
+            <Ref N="Value" RefId="5" />
+          </En>
+          <En>
+            <S N="Key">Workflow</S>
+            <Ref N="Value" RefId="5" />
+          </En>
+          <En>
+            <S N="Key">Function</S>
+            <Ref N="Value" RefId="5" />
+          </En>
+          <En>
+            <S N="Key">Command</S>
+            <Ref N="Value" RefId="5" />
+          </En>
+        </DCT>
+      </Obj>
+      <Nil N="PowerShellGetFormatVersion" />
+      <S N="ReleaseNotes">See https://aka.ms/GraphPowerShell-Release.</S>
+      <Obj N="Dependencies" RefId="6">
+        <TNRef RefId="2" />
+        <LST>
+          <Obj RefId="7">
+            <TN RefId="4">
+              <T>System.Collections.Specialized.OrderedDictionary</T>
+              <T>System.Object</T>
+            </TN>
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Authentication</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Authentication/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="8">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Applications</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Applications/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="9">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Bookings</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Bookings/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="10">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.BackupRestore</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.BackupRestore/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="11">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Calendar</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Calendar/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="12">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.ChangeNotifications</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.ChangeNotifications/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="13">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.CloudCommunications</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.CloudCommunications/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="14">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Compliance</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Compliance/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="15">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.CrossDeviceExperiences</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.CrossDeviceExperiences/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="16">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Devices.CloudPrint</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Devices.CloudPrint/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="17">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Devices.CorporateManagement</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Devices.CorporateManagement/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="18">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Devices.ServiceAnnouncement</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Devices.ServiceAnnouncement/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="19">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.DeviceManagement</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.DeviceManagement/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="20">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.DeviceManagement.Administration</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.DeviceManagement.Administration/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="21">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.DeviceManagement.Enrollment</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.DeviceManagement.Enrollment/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="22">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.DeviceManagement.Actions</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.DeviceManagement.Actions/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="23">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.DeviceManagement.Functions</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.DeviceManagement.Functions/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="24">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.DirectoryObjects</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.DirectoryObjects/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="25">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Education</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Education/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="26">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Files</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Files/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="27">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Groups</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Groups/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="28">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Identity.DirectoryManagement</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Identity.DirectoryManagement/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="29">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Identity.Governance</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Identity.Governance/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="30">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Identity.SignIns</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Identity.SignIns/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="31">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Identity.Partner</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Identity.Partner/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="32">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Mail</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Mail/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="33">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Notes</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Notes/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="34">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.People</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.People/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="35">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.PersonalContacts</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.PersonalContacts/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="36">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Planner</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Planner/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="37">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Reports</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Reports/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="38">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.SchemaExtensions</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.SchemaExtensions/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="39">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Search</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Search/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="40">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Security</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Security/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="41">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Sites</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Sites/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="42">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Teams</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Teams/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="43">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Users</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Users/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="44">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Users.Actions</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Users.Actions/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+          <Obj RefId="45">
+            <TNRef RefId="4" />
+            <DCT>
+              <En>
+                <S N="Key">Name</S>
+                <S N="Value">Microsoft.Graph.Users.Functions</S>
+              </En>
+              <En>
+                <S N="Key">RequiredVersion</S>
+                <S N="Value">2.25.0</S>
+              </En>
+              <En>
+                <S N="Key">CanonicalId</S>
+                <S N="Value">nuget:Microsoft.Graph.Users.Functions/[2.25.0]</S>
+              </En>
+            </DCT>
+          </Obj>
+        </LST>
+      </Obj>
+      <S N="RepositorySourceLocation">https://www.powershellgallery.com/api/v2</S>
+      <S N="Repository">PSGallery</S>
+      <S N="PackageManagementProvider">NuGet</S>
+      <Obj N="AdditionalMetadata" RefId="46">
+        <TN RefId="5">
+          <T>System.Management.Automation.PSCustomObject</T>
+          <T>System.Object</T>
+        </TN>
+        <MS>
+          <S N="copyright">© Microsoft Corporation. All rights reserved.</S>
+          <S N="description">Microsoft Graph PowerShell module</S>
+          <S N="requireLicenseAcceptance">True</S>
+          <S N="releaseNotes">See https://aka.ms/GraphPowerShell-Release.</S>
+          <S N="isLatestVersion">False</S>
+          <S N="isAbsoluteLatestVersion">False</S>
+          <S N="versionDownloadCount">3608019</S>
+          <S N="downloadCount">13556184</S>
+          <S N="packageSize">17413</S>
+          <S N="published">11/21/2024 6:29:16 AM -05:00</S>
+          <S N="created">11/21/2024 6:29:16 AM -05:00</S>
+          <S N="lastUpdated">3/5/2025 5:10:00 PM -05:00</S>
+          <S N="tags">MicrosoftGraph Microsoft Office365 Graph PowerShell Outlook OneDrive AzureAD SharePoint Intune AzureAutomationNotSupported PSModule PSIncludes_Cmdlet PSEdition_Core PSEdition_Desktop</S>
+          <S N="developmentDependency">False</S>
+          <S N="updated">2025-03-05T17:10:00Z</S>
+          <S N="NormalizedVersion">2.25.0</S>
+          <S N="Authors">Microsoft</S>
+          <S N="IsPrerelease">false</S>
+          <S N="ItemType">Module</S>
+          <S N="FileList">Microsoft.Graph.nuspec|Microsoft.Graph.psd1|.signature.p7s</S>
+          <S N="GUID">fceec1eb-c2e8-4b2b-a120-0fab3f0d7b47</S>
+          <S N="PowerShellVersion">5.1</S>
+          <S N="DotNetFrameworkVersion">4.7.2</S>
+          <S N="CompanyName">Microsoft</S>
+        </MS>
+      </Obj>
+      <S N="InstalledLocation">C:\Users\rzl.NTDOMAIN1\OneDrive - SAX LLP\Documents\PowerShell\Modules\Microsoft.Graph\2.25.0</S>
+    </MS>
+  </Obj>
+</Objs>

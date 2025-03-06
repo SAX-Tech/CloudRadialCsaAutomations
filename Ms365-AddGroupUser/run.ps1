@@ -61,15 +61,7 @@ Write-Host "Raw Request Body: $($Request.Body)"
 
 # Ensure the request body is properly converted from JSON
 try {
-    $Body = $Request.Body | ConvertFrom-Json
-} catch {
-    Write-Host "Invalid JSON format received."
-    $message = "Request failed. Invalid JSON format."
-    $resultCode = 500
-}
-
-# If JSON was parsed correctly, assign values
-if ($resultCode -eq 200) {
+    $Body = $Request.Body | ConvertFrom-Json -ErrorAction Stop
     $UserEmail = $Body.UserEmail
     $GroupName = $Body.GroupName
     $TenantId = if ($Body.TenantId) { $Body.TenantId } else { $env:Ms365_TenantId }
@@ -82,25 +74,102 @@ if ($resultCode -eq 200) {
     Write-Host "Extracted TenantId: $TenantId"
     Write-Host "Extracted TicketId: $TicketId"
 
-    # Validate Security Key
-    if ($SecurityKey -And $SecurityKey -ne $Request.Headers.SecurityKey) {
-        Write-Host "Invalid security key"
-        $message = "Invalid security key."
-        $resultCode = 500
-    }
-
-    # Validate required fields
-    if (-Not $UserEmail) {
-        $message = "UserEmail cannot be blank."
-        $resultCode = 500
-    }
-    if (-Not $GroupName) {
-        $message = "GroupName cannot be blank."
-        $resultCode = 500
-    }
+} catch {
+    Write-Host "❌ Invalid JSON format detected!"
+    $message = "Request failed. Invalid JSON format."
+    $resultCode = 500
 }
 
-# Construct response
+# Stop execution if JSON was invalid
+if ($resultCode -eq 500) {
+    $body = @{
+        Message = $message
+        TicketId = $TicketId
+        ResultCode = $resultCode
+        ResultStatus = "Failure"
+    }
+
+    Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
+        StatusCode = [HttpStatusCode]::BadRequest
+        Body = $body
+        ContentType = "application/json"
+    })
+    return  # Stop execution immediately
+}
+
+# Validate Security Key
+if ($SecurityKey -And $SecurityKey -ne $Request.Headers.SecurityKey) {
+    Write-Host "❌ Invalid security key"
+    $message = "Invalid security key."
+    $resultCode = 500
+}
+
+# Validate required fields
+if (-Not $UserEmail) {
+    Write-Host "❌ UserEmail is missing!"
+    $message = "UserEmail cannot be blank."
+    $resultCode = 500
+}
+if (-Not $GroupName) {
+    Write-Host "❌ GroupName is missing!"
+    $message = "GroupName cannot be blank."
+    $resultCode = 500
+}
+
+# Stop execution if validation fails
+if ($resultCode -eq 500) {
+    $body = @{
+        Message = $message
+        TicketId = $TicketId
+        ResultCode = $resultCode
+        ResultStatus = "Failure"
+    }
+
+    Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
+        StatusCode = [HttpStatusCode]::BadRequest
+        Body = $body
+        ContentType = "application/json"
+    })
+    return
+}
+
+# Proceed with Graph API Calls
+try {
+    $secure365Password = ConvertTo-SecureString -String $env:Ms365_AuthSecretId -AsPlainText -Force
+    $credential365 = New-Object System.Management.Automation.PSCredential($env:Ms365_AuthAppId, $secure365Password)
+
+    Connect-MgGraph -ClientSecretCredential $credential365 -TenantId $TenantId
+
+    $GroupObject = Get-MgGroup -Filter "displayName eq '$GroupName'"
+    $UserObject = Get-MgUser -Filter "userPrincipalName eq '$UserEmail'"
+
+    if (-Not $GroupObject) {
+        Write-Host "❌ Group not found: $GroupName"
+        $message = "Request failed. Group `"$GroupName`" could not be found."
+        $resultCode = 500
+    } elseif (-Not $UserObject) {
+        Write-Host "❌ User not found: $UserEmail"
+        $message = "Request failed. User `"$UserEmail`" could not be found."
+        $resultCode = 500
+    } else {
+        $GroupMembers = Get-MgGroupMember -GroupId $GroupObject.Id
+
+        if ($GroupMembers.Id -contains $UserObject.Id) {
+            Write-Host "❌ User already in group."
+            $message = "Request failed. User `"$UserEmail`" is already in group `"$GroupName`"."
+            $resultCode = 500
+        } else {
+            New-MgGroupMember -GroupId $GroupObject.Id -DirectoryObjectId $UserObject.Id
+            $message = "✅ Request completed. `"$UserEmail`" has been added to group `"$GroupName`"."
+        }
+    }
+} catch {
+    Write-Host "❌ Error in Graph API Call: $_"
+    $message = "An error occurred while processing the request."
+    $resultCode = 500
+}
+
+# Construct final response
 $body = @{
     Message = $message
     TicketId = $TicketId
@@ -114,4 +183,3 @@ Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
     Body = $body
     ContentType = "application/json"
 })
-

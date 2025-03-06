@@ -27,6 +27,6 @@ jobs:
           app-name: 'CloudRadial-Group-Automation'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B653D17C7B5B49F3A29CD8EB9019481C }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D5793E2F09D54284B660AB91E4A844E3 }}
           sku: 'flexconsumption'
         

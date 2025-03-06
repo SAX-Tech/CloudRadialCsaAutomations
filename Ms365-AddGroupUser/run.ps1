@@ -56,10 +56,10 @@ Write-Host "Add User to Group function triggered."
 $resultCode = 200
 $message = ""
 
-$UserEmail = $Request.UserEmail
-$GroupName = $Request.GroupName
-$TenantId = $Request.TenantId
-$TicketId = $Request.TicketId
+$UserEmail = $Request.Body.UserEmail
+$GroupName = $Request.Body.GroupName
+$TenantId = $Request.Body.TenantId
+$TicketId = $Request.Body.TicketId
 $SecurityKey = $env:SecurityKey
 
 if ($SecurityKey -And $SecurityKey -ne $Request.Headers.SecurityKey) {

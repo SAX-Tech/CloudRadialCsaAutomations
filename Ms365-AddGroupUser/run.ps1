@@ -2,26 +2,27 @@
 
 .SYNOPSIS
     
-    This function is used to add a user from a distribution group in Microsoft 365.
+    This function is to create a new group in Microsoft 365.
 
 .DESCRIPTION
-             
-    This function is used to add a user from a distribution group in Microsoft 365.
+    
+    This function is to create a new group in Microsoft 365.
     
     The function requires the following environment variables to be set:
-        
+    
     Ms365_AuthAppId - Application Id of the service principal
     Ms365_AuthSecretId - Secret Id of the service principal
     Ms365_TenantId - Tenant Id of the Microsoft 365 tenant
-        
+    SecurityKey - Optional, use this as an additional step to secure the function
+ 
     The function requires the following modules to be installed:
-        
+    
     Microsoft.Graph
-
+    
 .INPUTS
 
-    UserEmail - user email address that exists in the tenant
-    GroupName - group name that exists in the tenant
+    GroupName - group name to create
+    GroupDescription - group description
     TenantId - string value of the tenant id, if blank uses the environment variable Ms365_TenantId
     TicketId - optional - string value of the ticket id used for transaction tracking
     SecurityKey - Optional, use this as an additional step to secure the function
@@ -29,14 +30,14 @@
     JSON Structure
 
     {
-        "UserEmail": "email@address.com",
         "GroupName": "Group Name",
+        "GroupDescription": "Group Description",
         "TenantId": "12345678-1234-1234-123456789012",
         "TicketId": "123456,
         "SecurityKey", "optional"
     }
 
-.OUTPUTS 
+.OUTPUTS
 
     JSON response with the following fields:
 
@@ -51,135 +52,89 @@ using namespace System.Net
 
 param($Request, $TriggerMetadata)
 
-Write-Host "Add User to Group function triggered."
+Write-Host "NewGroup function triggered."
 
 $resultCode = 200
 $message = ""
 
-# DEBUG: Log raw request body
-Write-Host "Raw Request Body: $($Request.Body)"
+$GroupName = $Request.Body.GroupName
+$GroupDescription = $Request.Body.GroupDescription
+$TenantId = $Request.Body.TenantId
+$TicketId = $Request.Body.TicketId
+$SecurityKey = $env:SecurityKey
 
-# Ensure the request body is properly converted from JSON
-try {
-    $Body = $Request.Body | ConvertFrom-Json -ErrorAction Stop
-    $UserEmail = $Body.UserEmail
-    $GroupName = $Body.GroupName
-    $TenantId = if ($Body.TenantId) { $Body.TenantId } else { $env:Ms365_TenantId }
-    $TicketId = if ($Body.TicketId) { $Body.TicketId } else { "" }
-    $SecurityKey = $env:SecurityKey
-
-    # DEBUG: Print extracted values
-    Write-Host "Extracted UserEmail: $UserEmail"
-    Write-Host "Extracted GroupName: $GroupName"
-    Write-Host "Extracted TenantId: $TenantId"
-    Write-Host "Extracted TicketId: $TicketId"
-
-} catch {
-    Write-Host "❌ Invalid JSON format detected!"
-    $message = "Request failed. Invalid JSON format."
-    $resultCode = 500
-}
-
-# Stop execution if JSON was invalid
-if ($resultCode -eq 500) {
-    $body = @{
-        Message = $message
-        TicketId = $TicketId
-        ResultCode = $resultCode
-        ResultStatus = "Failure"
-    }
-
-    Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
-        StatusCode = [HttpStatusCode]::BadRequest
-        Body = $body
-        ContentType = "application/json"
-    })
-    return  # Stop execution immediately
-}
-
-# Validate Security Key
 if ($SecurityKey -And $SecurityKey -ne $Request.Headers.SecurityKey) {
-    Write-Host "❌ Invalid security key"
-    $message = "Invalid security key."
-    $resultCode = 500
+    Write-Host "Invalid security key"
+    break;
 }
 
-# Validate required fields
-if (-Not $UserEmail) {
-    Write-Host "❌ UserEmail is missing!"
-    $message = "UserEmail cannot be blank."
-    $resultCode = 500
-}
 if (-Not $GroupName) {
-    Write-Host "❌ GroupName is missing!"
     $message = "GroupName cannot be blank."
     $resultCode = 500
 }
-
-# Stop execution if validation fails
-if ($resultCode -eq 500) {
-    $body = @{
-        Message = $message
-        TicketId = $TicketId
-        ResultCode = $resultCode
-        ResultStatus = "Failure"
-    }
-
-    Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
-        StatusCode = [HttpStatusCode]::BadRequest
-        Body = $body
-        ContentType = "application/json"
-    })
-    return
+else {
+    $GroupName = $GroupName.Trim()
 }
 
-# Proceed with Graph API Calls
-try {
+if (-Not $GroupDescription) {
+    $message = "GroupDescription cannot be blank."
+    $resultCode = 500
+}
+else {
+    $GroupDescription = $GroupDescription.Trim()
+}
+
+if (-Not $TenantId) {
+    $TenantId = $env:Ms365_TenantId
+}
+else {
+    $TenantId = $TenantId.Trim()
+}
+
+if (-Not $TicketId) {
+    $TicketId = ""
+}
+
+Write-Host "Group Name: $GroupName"
+Write-Host "Group Description: $GroupDescription"
+Write-Host "Tenant Id: $TenantId"
+Write-Host "Ticket Id: $TicketId"
+
+if ($resultCode -Eq 200) {
     $secure365Password = ConvertTo-SecureString -String $env:Ms365_AuthSecretId -AsPlainText -Force
     $credential365 = New-Object System.Management.Automation.PSCredential($env:Ms365_AuthAppId, $secure365Password)
 
     Connect-MgGraph -ClientSecretCredential $credential365 -TenantId $TenantId
 
     $GroupObject = Get-MgGroup -Filter "displayName eq '$GroupName'"
-    $UserObject = Get-MgUser -Filter "userPrincipalName eq '$UserEmail'"
 
     if (-Not $GroupObject) {
-        Write-Host "❌ Group not found: $GroupName"
-        $message = "Request failed. Group `"$GroupName`" could not be found."
+        $message = "Group Name already exists."
         $resultCode = 500
-    } elseif (-Not $UserObject) {
-        Write-Host "❌ User not found: $UserEmail"
-        $message = "Request failed. User `"$UserEmail`" could not be found."
-        $resultCode = 500
-    } else {
-        $GroupMembers = Get-MgGroupMember -GroupId $GroupObject.Id
-
-        if ($GroupMembers.Id -contains $UserObject.Id) {
-            Write-Host "❌ User already in group."
-            $message = "Request failed. User `"$UserEmail`" is already in group `"$GroupName`"."
-            $resultCode = 500
-        } else {
-            New-MgGroupMember -GroupId $GroupObject.Id -DirectoryObjectId $UserObject.Id
-            $message = "✅ Request completed. `"$UserEmail`" has been added to group `"$GroupName`"."
-        }
     }
-} catch {
-    Write-Host "❌ Error in Graph API Call: $_"
-    $message = "An error occurred while processing the request."
-    $resultCode = 500
+
+    $GroupObject = New-MgGroup -DisplayName $GroupName -Description $GroupDescription -MailEnabled $true -MailNickname $GroupName -SecurityEnabled $true
+
+    if (-Not $GroupObject) {
+        $message = "Request failed. Could not create group `"$GroupName`"."
+        $resultCode = 500
+    }
+
+    if ($resultCode -Eq 200) {
+        $message = "Request completed. `"$GroupName`" has been created."
+    }
 }
 
-# Construct final response
 $body = @{
-    Message = $message
-    TicketId = $TicketId
-    ResultCode = $resultCode
+    Message      = $message
+    TicketId     = $TicketId
+    ResultCode   = $resultCode
     ResultStatus = if ($resultCode -eq 200) { "Success" } else { "Failure" }
-}
+} 
 
-# Send HTTP response
+# Associate values to output bindings by calling 'Push-OutputBinding'.
 Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
-    StatusCode = if ($resultCode -eq 200) { [HttpStatusCode]::OK } else { [HttpStatusCode]::BadRequest }
-    Body = $body
-    ContentType = "application/json"
-})
+        StatusCode  = [HttpStatusCode]::OK
+        Body        = $body
+        ContentType = "application/json"
+    })

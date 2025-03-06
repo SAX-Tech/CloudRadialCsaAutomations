@@ -86,6 +86,9 @@ Write-Host "Group Name: $GroupName"
 Write-Host "Tenant Id: $TenantId"
 Write-Host "Ticket Id: $TicketId"
 
+# Import the Microsoft Graph module
+Import-Module Microsoft.Graph -ErrorAction Stop
+
 if ($resultCode -Eq 200)
 {
     $secure365Password = ConvertTo-SecureString -String $env:Ms365_AuthSecretId -AsPlainText -Force

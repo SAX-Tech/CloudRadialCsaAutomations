@@ -56,99 +56,62 @@ Write-Host "Add User to Group function triggered."
 $resultCode = 200
 $message = ""
 
-$UserEmail = $Request.Body.UserEmail
-$GroupName = $Request.Body.GroupName
-$TenantId = $Request.Body.TenantId
-$TicketId = $Request.Body.TicketId
-$SecurityKey = $env:SecurityKey
+# DEBUG: Log raw request body
+Write-Host "Raw Request Body: $($Request.Body)"
 
-if ($SecurityKey -And $SecurityKey -ne $Request.Headers.SecurityKey) {
-    Write-Host "Invalid security key"
-    break;
-}
-
-if (-Not $userEmail) {
-    $message = "UserEmail cannot be blank."
+# Ensure the request body is properly converted from JSON
+try {
+    $Body = $Request.Body | ConvertFrom-Json
+} catch {
+    Write-Host "Invalid JSON format received."
+    $message = "Request failed. Invalid JSON format."
     $resultCode = 500
 }
-else {
-    $UserEmail = $UserEmail.Trim()
-}
 
-if (-Not $groupName) {
-    $message = "GroupName cannot be blank."
-    $resultCode = 500
-}
-else {
-    $GroupName = $GroupName.Trim()
-}
+# If JSON was parsed correctly, assign values
+if ($resultCode -eq 200) {
+    $UserEmail = $Body.UserEmail
+    $GroupName = $Body.GroupName
+    $TenantId = if ($Body.TenantId) { $Body.TenantId } else { $env:Ms365_TenantId }
+    $TicketId = if ($Body.TicketId) { $Body.TicketId } else { "" }
+    $SecurityKey = $env:SecurityKey
 
-if (-Not $TenantId) {
-    $TenantId = $env:Ms365_TenantId
-}
-else {
-    $TenantId = $TenantId.Trim()
-}
+    # DEBUG: Print extracted values
+    Write-Host "Extracted UserEmail: $UserEmail"
+    Write-Host "Extracted GroupName: $GroupName"
+    Write-Host "Extracted TenantId: $TenantId"
+    Write-Host "Extracted TicketId: $TicketId"
 
-if (-Not $TicketId) {
-    $TicketId = ""
-}
-
-Write-Host "User Email: $UserEmail"
-Write-Host "Group Name: $GroupName"
-Write-Host "Tenant Id: $TenantId"
-Write-Host "Ticket Id: $TicketId"
-
-if ($resultCode -Eq 200)
-{
-    $secure365Password = ConvertTo-SecureString -String $env:Ms365_AuthSecretId -AsPlainText -Force
-    $credential365 = New-Object System.Management.Automation.PSCredential($env:Ms365_AuthAppId, $secure365Password)
-
-    Connect-MgGraph -ClientSecretCredential $credential365 -TenantId $TenantId
-
-    $GroupObject = Get-MgGroup -Filter "displayName eq '$GroupName'"
-
-    Write-Host $GroupObject.DisplayName
-    Write-Host $GroupObject.Id
-
-    $UserObject = Get-MgUser -Filter "userPrincipalName eq '$UserEmail'"
-
-    Write-Host $UserObject.userPrincipalName
-    Write-Host $UserObject.Id
-
-    if (-Not $GroupObject) {
-        $message = "Request failed. Group `"$GroupName`" could not be found to add user `"$UserEmail`" to."
+    # Validate Security Key
+    if ($SecurityKey -And $SecurityKey -ne $Request.Headers.SecurityKey) {
+        Write-Host "Invalid security key"
+        $message = "Invalid security key."
         $resultCode = 500
     }
 
-    if (-Not $UserObject) {
-        $message = "Request failed. User `"$UserEmail`" not be found to add to group `"$GroupName`"."
+    # Validate required fields
+    if (-Not $UserEmail) {
+        $message = "UserEmail cannot be blank."
         $resultCode = 500
     }
-
-    $GroupMembers = Get-MgGroupMember -GroupId $GroupObject.Id
-
-    if ($GroupMembers.Id -Contains $UserObject.Id) {
-        $message = "Request failed. User `"$UserEmail`" is already a member of group `"$GroupName`"."
+    if (-Not $GroupName) {
+        $message = "GroupName cannot be blank."
         $resultCode = 500
-    } 
-
-    if ($resultCode -Eq 200) {
-        New-MgGroupMember -GroupId $GroupObject.Id -DirectoryObjectId $UserObject.Id
-        $message = "Request completed. `"$UserEmail`" has been added to group `"$GroupName`"."
     }
 }
 
+# Construct response
 $body = @{
     Message = $message
     TicketId = $TicketId
     ResultCode = $resultCode
     ResultStatus = if ($resultCode -eq 200) { "Success" } else { "Failure" }
-} 
+}
 
-# Associate values to output bindings by calling 'Push-OutputBinding'.
+# Send HTTP response
 Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
-    StatusCode = [HttpStatusCode]::OK
+    StatusCode = if ($resultCode -eq 200) { [HttpStatusCode]::OK } else { [HttpStatusCode]::BadRequest }
     Body = $body
     ContentType = "application/json"
 })
+

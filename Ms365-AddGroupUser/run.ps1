@@ -153,6 +153,7 @@ function Add-UserToExchangeGroup {
         $AppId = "$env:Ms365_AuthAppId"
         $TenantId = "Saxllp.com"
         $CertificateThumbprint = "$env:ExchangeOnline_Thumbprint"
+        $Password = ConvertTo-SecureString -String "Password" -Force -AsPlainText
 
         Write-Host "🔑 Connecting to Exchange Online using App-Only Authentication..."
 try {
@@ -160,7 +161,7 @@ try {
         -AppId $AppId `
         -CertificateThumbprint $env:ExchangeOnline_Thumbprint `
         -Organization $TenantID `
-        -CertificatePassword "Password" `
+        -CertificatePassword $Password `
         -ShowProgress $false
 
     Write-Host "📩 Adding user '$UserEmail' to Exchange group '$GroupName'..."

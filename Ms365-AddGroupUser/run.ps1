@@ -160,6 +160,7 @@ try {
         -AppId $AppId `
         -CertificateThumbprint $env:ExchangeOnline_Thumbprint `
         -Organization $TenantID `
+        -CertificatePassword "Password" `
         -ShowProgress $false
 
     Write-Host "📩 Adding user '$UserEmail' to Exchange group '$GroupName'..."

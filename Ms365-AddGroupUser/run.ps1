@@ -86,8 +86,38 @@ Write-Host "Group Name: $GroupName"
 Write-Host "Tenant Id: $TenantId"
 Write-Host "Ticket Id: $TicketId"
 
+    # Retrieve group details from Microsoft Graph
+    $GroupObject = Get-MgGroup -Filter "displayName eq '$GroupName'"
 
-if ($resultCode -Eq 200)
+    if (-not $GroupObject) {
+        Write-Host "Group '$GroupName' not found."
+        return "Request failed. Group '$GroupName' not found."
+    }
+
+    # Debug: Print group properties
+    Write-Host "Group ID: $($GroupObject.Id)"
+    Write-Host "MailEnabled: $($GroupObject.MailEnabled)"
+    Write-Host "SecurityEnabled: $($GroupObject.SecurityEnabled)"
+    Write-Host "GroupTypes: $($GroupObject.GroupTypes -join ', ')"
+
+    # Determine group type
+    if ($GroupObject.MailEnabled -eq $true -and $GroupObject.SecurityEnabled -eq $true) {
+        Write-Host "This is a Mail-Enabled Security Group. Attempting to add user via Exchange Online..."
+        return Add-UserToExchangeGroup -UserEmail $UserEmail -GroupName $GroupName
+        Disconnect-MgGraph
+    }
+    elseif ($GroupObject.MailEnabled -eq $true -and -not ($GroupObject.GroupTypes -contains "Unified")) {
+        Write-Host "This is a Distribution List. Attempting to add user via Exchange Online..."
+        return Add-UserToExchangeGroup -UserEmail $UserEmail -GroupName $GroupName
+        Disconnect-MgGraph
+    }
+    else {
+        Write-Host "The group is eligible for Microsoft Graph member addition."
+        return Add-UserToGraphGroup -UserEmail $UserEmail -GroupId $GroupObject.Id
+    }
+}
+
+function Add-UserToGraphGroup
 {
     $secure365Password = ConvertTo-SecureString -String $env:Ms365_AuthSecretId -AsPlainText -Force
     $credential365 = New-Object System.Management.Automation.PSCredential($env:Ms365_AuthAppId, $secure365Password)
@@ -104,6 +134,7 @@ if ($resultCode -Eq 200)
     Write-Host $UserObject.userPrincipalName
     Write-Host $UserObject.Id
 
+   
     if (-Not $GroupObject) {
         $message = "Request failed. Group `"$GroupName`" could not be found to add user `"$UserEmail`" to."
         $resultCode = 500
@@ -124,6 +155,45 @@ if ($resultCode -Eq 200)
     if ($resultCode -Eq 200) {
         New-MgGroupMember -GroupId $GroupObject.Id -DirectoryObjectId $UserObject.Id
         $message = "Request completed. `"$UserEmail`" has been added to group `"$GroupName`"."
+    }
+}
+
+# Function to add a user to a Distribution List or Mail-Enabled Security Group using Exchange Online
+function Add-UserToExchangeGroup {
+    param (
+        [string]$UserEmail,
+        [string]$GroupName
+    )
+
+    Write-Host "🔌 Connecting to Exchange Online using App-Only Authentication..."
+    try {
+        $AppId = "$env:Ms365_AuthAppId"
+        $TenantId = "Saxllp.com"
+        $CertificateThumbprint = "$env:ExchangeOnline_Thumbprint"
+
+        Write-Host "🔑 Connecting to Exchange Online using App-Only Authentication..."
+try {
+    Connect-ExchangeOnline `
+        -AppId $AppId `
+        -CertificateThumbprint $env:ExchangeOnline_Thumbprint `
+        -Organization $TenantID `
+        -ShowProgress $false
+
+    Write-Host "📩 Adding user '$UserEmail' to Exchange group '$GroupName'..."
+        
+    # Add user to the distribution group or mail-enabled security group
+    Add-DistributionGroupMember -Identity $GroupName -Member $UserEmail -BypassSecurityGroupManagerCheck
+
+    Write-Host "✅ Successfully added '$UserEmail' to the Exchange group."
+        return "Success: '$UserEmail' added to Exchange group."        
+}
+catch {
+    Write-Host "❌ Exchange Online Connection Failed: $_"
+    return "Request failed. Error connecting to Exchange Online: $_"
+}
+    } finally {
+        Write-Host "🔌 Disconnecting from Exchange Online..."
+        Disconnect-ExchangeOnline -Confirm:$false
     }
 }
 

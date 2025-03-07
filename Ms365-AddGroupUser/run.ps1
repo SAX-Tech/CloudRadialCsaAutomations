@@ -115,7 +115,7 @@ Write-Host "Ticket Id: $TicketId"
         Write-Host "The group is eligible for Microsoft Graph member addition."
         return Add-UserToGraphGroup -UserEmail $UserEmail -GroupId $GroupObject.Id
     }
-}
+
 
 function Add-UserToGraphGroup
 {

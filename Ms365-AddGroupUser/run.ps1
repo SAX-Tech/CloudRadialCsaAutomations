@@ -86,6 +86,11 @@ Write-Host "Group Name: $GroupName"
 Write-Host "Tenant Id: $TenantId"
 Write-Host "Ticket Id: $TicketId"
 
+#Connect to Graph
+$secure365Password = ConvertTo-SecureString -String $env:Ms365_AuthSecretId -AsPlainText -Force
+    $credential365 = New-Object System.Management.Automation.PSCredential($env:Ms365_AuthAppId, $secure365Password)
+
+    Connect-MgGraph -ClientSecretCredential $credential365 -TenantId $TenantId
     # Retrieve group details from Microsoft Graph
     $GroupObject = Get-MgGroup -Filter "displayName eq '$GroupName'"
 
@@ -119,11 +124,6 @@ Write-Host "Ticket Id: $TicketId"
 
 function Add-UserToGraphGroup
 {
-    $secure365Password = ConvertTo-SecureString -String $env:Ms365_AuthSecretId -AsPlainText -Force
-    $credential365 = New-Object System.Management.Automation.PSCredential($env:Ms365_AuthAppId, $secure365Password)
-
-    Connect-MgGraph -ClientSecretCredential $credential365 -TenantId $TenantId
-
     $GroupObject = Get-MgGroup -Filter "displayName eq '$GroupName'"
 
     Write-Host $GroupObject.DisplayName

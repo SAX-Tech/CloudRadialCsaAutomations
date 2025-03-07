@@ -104,24 +104,7 @@ $secure365Password = ConvertTo-SecureString -String $env:Ms365_AuthSecretId -AsP
     Write-Host "MailEnabled: $($GroupObject.MailEnabled)"
     Write-Host "SecurityEnabled: $($GroupObject.SecurityEnabled)"
     Write-Host "GroupTypes: $($GroupObject.GroupTypes -join ', ')"
-
-    # Determine group type
-    if ($GroupObject.MailEnabled -eq $true -and $GroupObject.SecurityEnabled -eq $true) {
-        Write-Host "This is a Mail-Enabled Security Group. Attempting to add user via Exchange Online..."
-        return Add-UserToExchangeGroup -UserEmail $UserEmail -GroupName $GroupName
-        Disconnect-MgGraph
-    }
-    elseif ($GroupObject.MailEnabled -eq $true -and -not ($GroupObject.GroupTypes -contains "Unified")) {
-        Write-Host "This is a Distribution List. Attempting to add user via Exchange Online..."
-        return Add-UserToExchangeGroup -UserEmail $UserEmail -GroupName $GroupName
-        Disconnect-MgGraph
-    }
-    else {
-        Write-Host "The group is eligible for Microsoft Graph member addition."
-        return Add-UserToGraphGroup -UserEmail $UserEmail -GroupId $GroupObject.Id
-    }
-
-
+    
 function Add-UserToGraphGroup
 {
     $GroupObject = Get-MgGroup -Filter "displayName eq '$GroupName'"
@@ -196,6 +179,22 @@ catch {
         Disconnect-ExchangeOnline -Confirm:$false
     }
 }
+
+    # Determine group type
+    if ($GroupObject.MailEnabled -eq $true -and $GroupObject.SecurityEnabled -eq $true) {
+        Write-Host "This is a Mail-Enabled Security Group. Attempting to add user via Exchange Online..."
+        return Add-UserToExchangeGroup -UserEmail $UserEmail -GroupName $GroupName
+        Disconnect-MgGraph
+    }
+    elseif ($GroupObject.MailEnabled -eq $true -and -not ($GroupObject.GroupTypes -contains "Unified")) {
+        Write-Host "This is a Distribution List. Attempting to add user via Exchange Online..."
+        return Add-UserToExchangeGroup -UserEmail $UserEmail -GroupName $GroupName
+        Disconnect-MgGraph
+    }
+    else {
+        Write-Host "The group is eligible for Microsoft Graph member addition."
+        return Add-UserToGraphGroup -UserEmail $UserEmail -GroupId $GroupObject.Id
+    }
 
 $body = @{
     Message = $message

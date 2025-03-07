@@ -86,9 +86,6 @@ Write-Host "Group Name: $GroupName"
 Write-Host "Tenant Id: $TenantId"
 Write-Host "Ticket Id: $TicketId"
 
-# Import the Microsoft Graph module
-Import-Module -Name Microsoft.Graph
-
 
 if ($resultCode -Eq 200)
 {

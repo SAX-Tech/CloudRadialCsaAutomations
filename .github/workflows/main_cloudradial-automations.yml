@@ -26,4 +26,4 @@ jobs:
           app-name: 'CloudRadial-Automations'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2866C7BFB10B4A4BBFD432D5D1AC6415 }}
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}

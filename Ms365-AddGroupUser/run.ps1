@@ -157,7 +157,7 @@ function Add-UserToExchangeGroup {
 
         Write-Host "🔑 Connecting to Exchange Online using App-Only Authentication..."
 try {
-    Connect-ExchangeOnline -ManagedIdentity -Organization contoso.onmicrosoft.com
+    Connect-ExchangeOnline -ManagedIdentity -Organization saxllp.onmicrosoft.com
 
     Write-Host "📩 Adding user '$UserEmail' to Exchange group '$GroupName'..."
         

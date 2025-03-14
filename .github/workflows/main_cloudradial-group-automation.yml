@@ -15,10 +15,23 @@ env:
 jobs:
   deploy:
     runs-on: windows-latest
+
+    permissions:
+      id-token: write  # Enables OIDC authentication
+      contents: read
     
     steps:
       - name: 'Checkout GitHub Action'
         uses: actions/checkout@v4
+
+      # Authenticate with Azure using OIDC (No Secrets Needed)
+      - name: 'Login to Azure'
+        id: azure_login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ env.Ms365_AuthAppID }}
+          tenant-id: ${{ env.Ms365_TenantID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
       
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1

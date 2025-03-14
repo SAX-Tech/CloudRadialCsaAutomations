@@ -157,14 +157,6 @@ function Add-UserToExchangeGroup {
 
         Write-Host "🔑 Connecting to Exchange Online using App-Only Authentication..."
 try {
-
-    # Connect using Managed Identity (OIDC)
-    Connect-MgGraph -Scopes "https://outlook.office365.com/.default"
-
-    # Retrieve the access token
-    $AccessToken = (Get-MgContext).AccessToken
-    Write-Output "Token: $AccessToken"
-
     Connect-ExchangeOnline -ManagedIdentity -Organization saxllp.onmicrosoft.com
     
     Write-Host "📩 Adding user '$UserEmail' to Exchange group '$GroupName'..."

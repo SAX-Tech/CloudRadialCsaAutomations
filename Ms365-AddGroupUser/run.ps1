@@ -157,7 +157,11 @@ function Add-UserToExchangeGroup {
 
         Write-Host "🔑 Connecting to Exchange Online using App-Only Authentication..."
 try {
-    Connect-ExchangeOnline -AppId $AppId -Certificate "5fecafa5-fe64-454c-9f8d-923d73a073c4" -Organization "saxllp.onmicrosoft.com"
+
+    $AccessToken = Get-MgAccessToken -Scopes "https://outlook.office365.com/.default"
+    Write-Output "Token: $AccessToken"
+
+    Connect-ExchangeOnline -AppId $AppId -AccessToken $AccessToken -Organization "saxllp.onmicrosoft.com"
     
     Write-Host "📩 Adding user '$UserEmail' to Exchange group '$GroupName'..."
         

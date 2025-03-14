@@ -165,7 +165,7 @@ try {
     $AccessToken = (Get-MgContext).AccessToken
     Write-Output "Token: $AccessToken"
 
-    Connect-ExchangeOnline -AppId $AppId -AccessToken $AccessToken -Organization "saxllp.onmicrosoft.com"
+    Connect-ExchangeOnline -ManagedIdentity -Organization saxllp.onmicrosoft.com
     
     Write-Host "📩 Adding user '$UserEmail' to Exchange group '$GroupName'..."
         

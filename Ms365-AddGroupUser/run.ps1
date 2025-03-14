@@ -157,7 +157,7 @@ function Add-UserToExchangeGroup {
 
         Write-Host "🔑 Connecting to Exchange Online using App-Only Authentication..."
 try {
-    Connect-ExchangeOnline -AppId $AppId -CertificateThumbprint "$env:ExchangeOnline_Thumbprint" -Organization "saxllp.onmicrosoft.com"
+    Connect-ExchangeOnline -AppId $AppId -Certificate "5fecafa5-fe64-454c-9f8d-923d73a073c4" -Organization "saxllp.onmicrosoft.com"
     
     Write-Host "📩 Adding user '$UserEmail' to Exchange group '$GroupName'..."
         

@@ -40,4 +40,3 @@ Push-OutputBinding -Name Response -Value @{
     Headers = @{ "Content-Type" = "text/html" }
     Body = $htmlContent
 }
-

@@ -28,8 +28,9 @@ $response = @{
     groups = $groupNames
 }
 
-# Return the group data in JSON format
-return @{
-    StatusCode = $resultCode
-    Body = $response | ConvertTo-Json -Depth 3
-}
+# Associate values to output bindings by calling 'Push-OutputBinding'.
+Push-OutputBinding -Name Response -Value ([HttpResponseContext]@{
+    StatusCode = [HttpStatusCode]::OK
+    Body = $response
+    ContentType = "application/json"
+})

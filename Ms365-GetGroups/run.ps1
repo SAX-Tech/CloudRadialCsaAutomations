@@ -33,7 +33,7 @@ foreach ($name in $groupNames) {
 # Get CloudRadial API token
 $tokenUrl = "https://api.us.cloudradial.com/api/beta/token"
 $formId = "231"
-$formUrl = "https://help.saxtechnology.com/app/service/request/$formID"
+$formUrl = "https://api.us.cloudradial.com/api/beta/forms/$formId"
 
 $clientId = $env:API_USERNAME
 $clientSecret = $env:API_PASSWORD

@@ -31,7 +31,7 @@ foreach ($name in $groupNames) {
 
 # Get CloudRadial API token
 # Get CloudRadial API token
-$tokenUrl = "https://saxtechnology.us.cloudradial.com/api/beta/token"
+$tokenUrl = "https://api.us.cloudradial.com/api/beta/token"
 $formId = "231"
 $formUrl = "https://help.saxtechnology.com/app/service/request/$formID"
 

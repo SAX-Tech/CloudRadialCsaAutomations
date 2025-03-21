@@ -135,7 +135,7 @@ Set-CloudRadialToken -Token "CompanyDomains" -AppId ${env:CloudRadialCsa_ApiPubl
 
 Write-Host "Updated CompanyDomains for Company Id: $companyId."
 
-$message = "Company tokens for $comanyId have been updated."
+$message = "Company tokens for $companyId have been updated."
 
 $body = @{
     Message      = $message
